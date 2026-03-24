@@ -20,8 +20,8 @@ export const membersData = [
     colorTheme: { border: "border-mc-grass", badge: "bg-mc-grass" },
     roleIcon: "fa-solid fa-shield-halved",
     joinDate: "Januari 2026",
-    favoriteBlock: "Quartz Block",
-    description: "Tangan kanan Owner yang mengurus server. Kadang sering afk, tapi sekalinya build hasilnya sangat luar biasa estetik."
+    favoriteBlock: "End Rod",
+    description: "Simpers sejati stay gold."
   },
   { 
     id: 3,
