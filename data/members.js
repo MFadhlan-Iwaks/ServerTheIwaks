@@ -59,4 +59,16 @@ export const membersData = [
     favoriteBlock: "Axe",
     description: "Trialblazer yang ketinggalan kereta."
   },
+  {
+    id: 6,
+    name: "Myafasa",
+    skinPath: "/images/matikanetannhauser.png", 
+    role: "Karbit",
+    quote: "Kanarazu katsu",
+    colorTheme: { border: "border-blue-700", badge: "bg-blue-700" },
+    roleIcon: "fa-solid fa-diamond",
+    joinDate: "Februari 2026",
+    favoriteBlock: "bow",
+    description: "apalah akumah keroco."
+  }
 ];
