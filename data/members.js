@@ -70,5 +70,17 @@ export const membersData = [
     joinDate: "Februari 2026",
     favoriteBlock: "wind charge",
     description: "duta kepala(kepala bro literally ada di semua tempat)."
+  },
+  {
+    id: 7,
+    name: "farays21",
+    skinPath: "/images/farays skin.png", 
+    role: "rioters",
+    quote: "one goal, a thousand path",
+    colorTheme: { border: "border-red-500", badge: "bg-red-500" },
+    roleIcon: "fa-solid fa-exclamation-triangle",
+    joinDate: "Februari 2026",
+    favoriteBlock: "tnt",
+    description: "main kalo lagi gabut aja sih"
   }
 ];
