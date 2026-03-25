@@ -63,12 +63,12 @@ export const membersData = [
     id: 6,
     name: "Myafasa",
     skinPath: "/images/matikanetannhauser.png", 
-    role: "Karbit",
-    quote: "Kanarazu katsu",
+    role: "Boukensha",
+    quote: "karbit itu bukan penyakit, melainkan jalan hidup",
     colorTheme: { border: "border-blue-700", badge: "bg-blue-700" },
     roleIcon: "fa-solid fa-diamond",
     joinDate: "Februari 2026",
-    favoriteBlock: "bow",
-    description: "apalah akumah keroco."
+    favoriteBlock: "wind charge",
+    description: "duta kepala(kepala bro literally ada di semua tempat)."
   }
 ];
