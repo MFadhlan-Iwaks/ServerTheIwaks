@@ -68,7 +68,7 @@ export const membersData = [
     colorTheme: { border: "border-blue-700", badge: "bg-blue-700" },
     roleIcon: "fa-solid fa-diamond",
     joinDate: "Februari 2026",
-    favoriteBlock: "Axe",
+    favoriteBlock: "bow",
     description: "apalah akumah keroco."
   }
 ];
