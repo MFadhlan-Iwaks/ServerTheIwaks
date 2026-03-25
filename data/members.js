@@ -65,7 +65,7 @@ export const membersData = [
     skinPath: "/images/matikanetannhauser.png", 
     role: "Karbit",
     quote: "Kanarazu katsu",
-    colorTheme: { border: "border-mc-wood", badge: "bg-mc-wood" },
+    colorTheme: { border: "border-blue-700", badge: "bg-blue-700" },
     roleIcon: "fa-solid fa-diamond",
     joinDate: "Februari 2026",
     favoriteBlock: "Axe",
