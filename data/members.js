@@ -46,5 +46,17 @@ export const membersData = [
     joinDate: "Februari 2024",
     favoriteBlock: "Sponge",
     description: "Saudara seperjuangan iwak 1. Ahli dalam membuat kolam buatan dan mencari harta karun di bawah air."
-  }
+  },
+  {
+    id: 5,
+    name: "Shiend",
+    skinPath: "/images/novaskin.png", 
+    role: "Builder",
+    quote: "jangan lupa mulung",
+    colorTheme: { border: "border-mc-wood", badge: "bg-mc-wood" },
+    roleIcon: "fa-solid fa-hammer",
+    joinDate: "Februari 2026",
+    favoriteBlock: "Axe",
+    description: "Trialblazer yang ketinggalan kereta."
+  },
 ];
