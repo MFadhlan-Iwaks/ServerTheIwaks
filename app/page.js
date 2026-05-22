@@ -1,12 +1,30 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import MemberCard from "../components/MemberCard";
 import CommandCard from "../components/CommandCard";
+import SectionWrapper from "../components/SectionWrapper";
+import ScrollProgress from "../components/ScrollProgress";
+import SectionNav from "../components/SectionNav";
+import HeroParallax from "../components/HeroParallax";
+import ScrollToTop from "../components/ScrollToTop";
 import { membersData } from "../data/members";
 import { commandsData } from "../data/commands";
 import { galleryData } from "../data/gallery";
 import { rulesData } from "../data/rules";
+
+const HERO_PIXELS = [
+  { left: "7%",  top: "78%", size: 11, dur: 4.4, delay: 0.0 },
+  { left: "16%", top: "68%", size: 7,  dur: 5.6, delay: 0.8 },
+  { left: "29%", top: "82%", size: 9,  dur: 4.9, delay: 1.5 },
+  { left: "43%", top: "88%", size: 13, dur: 5.2, delay: 0.3 },
+  { left: "57%", top: "74%", size: 8,  dur: 4.7, delay: 1.1 },
+  { left: "68%", top: "84%", size: 10, dur: 5.8, delay: 0.6 },
+  { left: "79%", top: "70%", size: 7,  dur: 4.3, delay: 1.9 },
+  { left: "89%", top: "80%", size: 12, dur: 5.1, delay: 0.4 },
+  { left: "22%", top: "90%", size: 6,  dur: 6.0, delay: 2.2 },
+  { left: "52%", top: "92%", size: 8,  dur: 4.6, delay: 0.9 },
+];
 
 const navLinks = [
   { href: "#beranda", label: "Beranda" },
@@ -19,6 +37,35 @@ const navLinks = [
 export default function Home() {
   const [copiedType, setCopiedType] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("beranda");
+
+  useEffect(() => {
+    let raf = 0;
+    const track = () => {
+      raf = 0;
+      const mid = window.scrollY + window.innerHeight * 0.4;
+      let closest = "beranda";
+      let minDist = Infinity;
+      for (const { href } of navLinks) {
+        const id = href.slice(1);
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        const d = Math.abs(top - mid);
+        if (d < minDist) { minDist = d; closest = id; }
+      }
+      setActiveSection(closest);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(track); };
+    track();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   const javaIP = "basic2.raehost.com:19258";
   const bedrockIP = "basic2.raehost.com";
@@ -37,28 +84,39 @@ export default function Home() {
   return (
     <main className="bg-mc-bg text-gray-800 antialiased selection:bg-mc-grass selection:text-white min-h-screen">
 
+      <ScrollProgress />
+      <SectionNav />
+      <HeroParallax />
+      <ScrollToTop />
+
       {/* ===== NAVBAR ===== */}
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex-shrink-0 flex items-center gap-2">
-              <i className="fa-solid fa-cube text-mc-grass text-2xl"></i>
+            <a href="#beranda" className="brand-wrap shrink-0 flex items-center gap-2 no-underline">
+              <span className="brand-cube text-mc-grass text-2xl">
+                <i className="fa-solid fa-cube"></i>
+              </span>
               <span className="font-heading font-black text-2xl tracking-tight text-gray-900">
                 the <span className="text-mc-grass">IWAKS</span>
               </span>
-            </div>
+            </a>
 
             {/* Desktop nav links */}
-            <div className="hidden md:flex space-x-6">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-gray-600 hover:text-mc-grass font-bold transition"
-                >
-                  {link.label}
-                </a>
-              ))}
+            <div className="hidden md:flex space-x-7">
+              {navLinks.map((link) => {
+                const id = link.href.slice(1);
+                const isActive = activeSection === id;
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className={`nav-link-anim text-gray-600 hover:text-mc-grass font-bold transition ${isActive ? "text-mc-grass active" : ""}`}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
             </div>
 
             {/* Desktop Discord button */}
@@ -68,7 +126,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <button className="bg-mc-grass hover:bg-green-600 text-white px-5 py-2 rounded-lg font-bold shadow-lg shadow-green-500/30 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                <button className="bg-[#5865F2] hover:bg-[#4752c4] text-white px-5 py-2 rounded-lg font-bold shadow-lg shadow-[rgba(88,101,242,0.30)] transition transform hover:-translate-y-0.5 flex items-center gap-2">
                   <i className="fa-brands fa-discord"></i> Join Discord
                 </button>
               </a>
@@ -87,7 +145,7 @@ export default function Home() {
 
         {/* Mobile dropdown menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 flex flex-col gap-1 shadow-lg">
+          <div className="mobile-menu-anim md:hidden bg-white border-t border-gray-100 px-4 py-3 flex flex-col gap-1 shadow-lg">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -104,7 +162,7 @@ export default function Home() {
               rel="noopener noreferrer"
               onClick={() => setIsMenuOpen(false)}
             >
-              <button className="w-full mt-2 bg-mc-grass hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-bold flex items-center justify-center gap-2">
+              <button className="w-full mt-2 bg-[#5865F2] hover:bg-[#4752c4] text-white px-5 py-2.5 rounded-lg font-bold flex items-center justify-center gap-2">
                 <i className="fa-brands fa-discord"></i> Join Discord
               </button>
             </a>
@@ -117,11 +175,31 @@ export default function Home() {
         id="beranda"
         className="relative bg-pattern text-white py-24 sm:py-32 overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1b4332]/80"></div>
+        {/* pixel particles rising from the ground */}
+        {HERO_PIXELS.map((p, i) => (
+          <span
+            key={i}
+            className="hero-pixel"
+            style={{
+              left: p.left,
+              top: p.top,
+              width: p.size,
+              height: p.size,
+              animationDuration: p.dur + "s",
+              animationDelay: p.delay + "s",
+            }}
+          />
+        ))}
+        {/* floating ornaments */}
+        <i className="fa-solid fa-cube ornament o1" aria-hidden="true"></i>
+        <i className="fa-solid fa-diamond ornament o2" aria-hidden="true"></i>
+        <i className="fa-solid fa-tree ornament o3" aria-hidden="true"></i>
+
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#1b4332]/80 pointer-events-none"></div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center gap-3 mb-6">
-            <span className="inline-block py-1 px-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-bold tracking-wider">
-              🟢 ONLINE (1.21.11)
+          <div className="hero-badges flex justify-center gap-3 mb-6 flex-wrap">
+            <span className="inline-flex items-center py-1 px-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-bold tracking-wider">
+              <span className="dot-online" aria-hidden="true"></span> ONLINE (1.21.11)
             </span>
             <span className="inline-block py-1 px-3 rounded-full bg-blue-500/80 backdrop-blur-sm border border-blue-300/50 text-sm font-bold tracking-wider shadow-[0_0_15px_rgba(59,130,246,0.5)]">
               <i className="fa-solid fa-mobile-screen-button mr-1"></i>{" "}
@@ -129,17 +207,17 @@ export default function Home() {
             </span>
           </div>
 
-          <h1 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl mb-6 drop-shadow-lg">
+          <h1 className="hero-h1 font-heading font-black text-5xl sm:text-6xl md:text-7xl mb-6 drop-shadow-lg">
             Bangun Dunia Bersama <br />{" "}
             <span className="text-yellow-300">the IWAKS</span>
           </h1>
-          <p className="text-xl sm:text-2xl text-green-50 mb-10 max-w-2xl mx-auto drop-shadow-md">
+          <p className="hero-sub-p text-xl sm:text-2xl text-green-50 mb-10 max-w-2xl mx-auto drop-shadow-md">
             Server survival vanilla yang santai, damai, dan berfokus pada
             kreativitas. Berdiri sejak <strong>Januari 2026</strong>. Bisa main
             bareng player Java dan Bedrock!
           </p>
 
-          <div className="flex flex-col md:flex-row justify-center gap-4 max-w-3xl mx-auto">
+          <div className="hero-ip-row flex flex-col md:flex-row justify-center gap-4 max-w-3xl mx-auto">
             <div className="flex-1 flex flex-col sm:flex-row items-center justify-between bg-white/10 backdrop-blur-md border border-white/30 rounded-xl p-2 shadow-xl">
               <div className="px-4 py-2 text-center sm:text-left w-full sm:w-auto">
                 <span className="block text-xs font-black text-green-300 tracking-wider mb-1">
@@ -183,14 +261,15 @@ export default function Home() {
 
       {/* ===== GALERI ===== */}
       <section id="galeri" className="py-20 bg-mc-bg">
+       <SectionWrapper>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
               Galeri Server
             </h2>
-            <div className="w-24 h-1 bg-mc-grass mx-auto rounded-full mb-4"></div>
+            <div className="divider-shimmer mb-4"></div>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Sekilas pandang ke dalam dunia the IWAKS — dari bangunan megah hingga momen konyol yang sayang dilewatkan!
+              Sekilas pandang ke dalam dunia the IWAKS dari bangunan megah hingga momen konyol yang sayang dilewatkan!
             </p>
           </div>
 
@@ -198,7 +277,7 @@ export default function Home() {
             {galleryData.map((item) => (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-2xl shadow-md"
+                className="group relative overflow-hidden rounded-2xl shadow-warm hover:shadow-warm-lg transition-shadow duration-500"
                 style={{ aspectRatio: "16/9" }}
               >
                 {item.image ? (
@@ -234,16 +313,18 @@ export default function Home() {
             Punya screenshot keren? Kirim ke Discord buat masuk galeri!
           </p>
         </div>
+       </SectionWrapper>
       </section>
 
       {/* ===== ATURAN SERVER ===== */}
       <section id="aturan" className="py-20 bg-white border-y border-gray-100">
+       <SectionWrapper>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
               Aturan Server
             </h2>
-            <div className="w-24 h-1 bg-mc-grass mx-auto rounded-full mb-4"></div>
+            <div className="divider-shimmer mb-4"></div>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Biar server tetap seru dan nyaman buat semua warga, tolong patuhi
               aturan berikut ya!
@@ -254,7 +335,7 @@ export default function Home() {
             {rulesData.map((rule, index) => (
               <div
                 key={rule.id}
-                className="flex gap-4 items-start bg-mc-bg rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                className="flex gap-4 items-start bg-mc-bg rounded-xl p-5 border border-gray-100 shadow-warm hover:shadow-warm-md transition-shadow duration-300"
               >
                 <div
                   className={`flex-shrink-0 w-10 h-10 rounded-lg ${rule.color} flex items-center justify-center text-white font-black text-sm font-heading`}
@@ -293,16 +374,18 @@ export default function Home() {
             </a>
           </div>
         </div>
+       </SectionWrapper>
       </section>
 
       {/* ===== COMMAND ===== */}
       <section id="command" className="py-20 bg-mc-bg border-y border-gray-100">
+       <SectionWrapper>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
               Panduan Command
             </h2>
-            <div className="w-24 h-1 bg-mc-grass mx-auto rounded-full mb-4"></div>
+            <div className="divider-shimmer mb-4"></div>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Kami menggunakan plugin Essentials untuk mempermudah
               petualanganmu. Klik pada kartu di bawah ini untuk melihat daftar
@@ -323,14 +406,19 @@ export default function Home() {
             ))}
           </div>
         </div>
+       </SectionWrapper>
       </section>
 
       {/* ===== WARGA ===== */}
       <section id="warga" className="py-20 bg-white relative">
+       <SectionWrapper>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-12 text-center">
-            Warga the IWAKS
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
+              Warga the IWAKS
+            </h2>
+            <div className="divider-shimmer"></div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {membersData.map((member) => (
@@ -349,6 +437,7 @@ export default function Home() {
             ))}
           </div>
         </div>
+       </SectionWrapper>
       </section>
 
       {/* ===== FOOTER ===== */}

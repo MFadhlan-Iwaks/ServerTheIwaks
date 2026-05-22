@@ -49,7 +49,7 @@ export default function MemberCard({ name, skinPath, role, quote, colorTheme, ro
         }}
       >
         <div 
-          className={`absolute w-full h-full bg-white rounded-2xl p-6 text-center border-b-4 ${colorTheme.border} shadow-sm group-hover:shadow-lg flex flex-col items-center justify-between`}
+          className={`absolute w-full h-full bg-white rounded-2xl p-6 text-center border-b-4 ${colorTheme.border} shadow-warm group-hover:shadow-warm-lg flex flex-col items-center justify-between`}
           style={{ backfaceVisibility: 'hidden' }}
         >
           <div className={`absolute top-0 right-0 ${colorTheme.badge} text-white text-xs font-bold px-3 py-1 rounded-bl-lg z-10`}>
@@ -72,7 +72,7 @@ export default function MemberCard({ name, skinPath, role, quote, colorTheme, ro
 
         
         <div 
-          className={`absolute w-full h-full bg-white rounded-2xl p-6 text-left border-b-4 ${colorTheme.border} shadow-sm flex flex-col`}
+          className={`absolute w-full h-full bg-white rounded-2xl p-6 text-left border-b-4 ${colorTheme.border} shadow-warm flex flex-col`}
           style={{ 
             backfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)' 
@@ -94,7 +94,7 @@ export default function MemberCard({ name, skinPath, role, quote, colorTheme, ro
             <div className="flex gap-3 items-start">
               <i className="fa-solid fa-cube text-gray-400 w-4 mt-1"></i> 
               <div>
-                <strong className="block text-gray-900 text-xs">Blok Favorit</strong>
+                <strong className="block text-gray-900 text-xs">Blok Favorit/Item Favorit</strong>
                 <span className="text-xs">{favoriteBlock}</span>
               </div>
             </div>

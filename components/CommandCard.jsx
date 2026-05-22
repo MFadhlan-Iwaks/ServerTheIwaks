@@ -6,7 +6,7 @@ export default function CommandCard({ title, icon, theme, shortDesc, list }) {
 
   return (
     <div 
-      className="bg-mc-bg rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden cursor-pointer"
+      className="bg-mc-bg rounded-xl border border-gray-200 shadow-warm hover:shadow-warm-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden cursor-pointer"
       onClick={() => setIsOpen(!isOpen)}
     >
       <div className="p-6">

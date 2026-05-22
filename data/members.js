@@ -37,14 +37,14 @@ export const membersData = [
   },
   {
     id: 4,
-    name: "iwak 2",
+    name: "AriefXXT",
     skinPath: "/images/odo.png", 
-    role: "iwaks",
-    quote: "iwak!",
-    colorTheme: { border: "border-blue-400", badge: "bg-blue-400" },
-    roleIcon: "",
-    joinDate: "Februari 2024",
-    favoriteBlock: "Sponge",
+    role: "Redstoner",
+    quote: "tusk act 4 rotate his balls",
+    colorTheme: { border: "border-red-400", badge: "bg-red-400" },
+    roleIcon: "fa-solid fa-gears",
+    joinDate: "Januari 2026",
+    favoriteBlock: "Redstone",
     description: "Saudara seperjuangan iwak 1. Ahli dalam membuat kolam buatan dan mencari harta karun di bawah air."
   },
   {
