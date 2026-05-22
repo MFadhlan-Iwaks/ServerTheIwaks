@@ -11,10 +11,14 @@ import ScrollToTop from "../components/ScrollToTop";
 import ThemeToggle from "../components/ThemeToggle";
 import Toast, { showToast } from "../components/Toast";
 import StatsCounter from "../components/StatsCounter";
+import EventCalendar from "../components/EventCalendar";
+import Leaderboard from "../components/Leaderboard";
 import { membersData } from "../data/members";
 import { commandsData } from "../data/commands";
 import { galleryData } from "../data/gallery";
 import { rulesData } from "../data/rules";
+import { eventsData } from "../data/events";
+import { leaderboardData, leaderboardCategories } from "../data/leaderboard";
 
 const HERO_PIXELS = [
   { left: "7%",  top: "78%", size: 11, dur: 4.4, delay: 0.0 },
@@ -32,8 +36,10 @@ const HERO_PIXELS = [
 const navLinks = [
   { href: "#beranda", label: "Beranda" },
   { href: "#galeri", label: "Galeri" },
+  { href: "#event", label: "Event" },
   { href: "#aturan", label: "Aturan" },
   { href: "#command", label: "Command" },
+  { href: "#leaderboard", label: "Ranking" },
   { href: "#warga", label: "Warga" },
 ];
 
@@ -368,6 +374,25 @@ export default function Home() {
        </SectionWrapper>
       </section>
 
+      {/* ===== EVENT KALENDER ===== */}
+      <section id="event" className="py-20 bg-white border-y border-gray-100">
+       <SectionWrapper>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
+              Jadwal Event
+            </h2>
+            <div className="divider-shimmer mb-4"></div>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Jangan sampai ketinggalan event seru dari server the IWAKS!
+              Pantau jadwal dan bersiaplah untuk ikutan.
+            </p>
+          </div>
+          <EventCalendar events={eventsData} />
+        </div>
+       </SectionWrapper>
+      </section>
+
       {/* ===== ATURAN SERVER ===== */}
       <section id="aturan" className="py-20 bg-white border-y border-gray-100 section-fade-into-cream">
        <SectionWrapper>
@@ -457,6 +482,24 @@ export default function Home() {
               />
             ))}
           </div>
+        </div>
+       </SectionWrapper>
+      </section>
+
+      {/* ===== LEADERBOARD ===== */}
+      <section id="leaderboard" className="py-20 bg-white border-y border-gray-100">
+       <SectionWrapper>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
+              Papan Peringkat
+            </h2>
+            <div className="divider-shimmer mb-4"></div>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Siapa yang paling rajin di server? Cek statistik warga the IWAKS di sini!
+            </p>
+          </div>
+          <Leaderboard categories={leaderboardCategories} data={leaderboardData} />
         </div>
        </SectionWrapper>
       </section>

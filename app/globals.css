@@ -502,6 +502,116 @@ body[data-theme="mewah"] ::-webkit-scrollbar-thumb:hover {
   color: #6b7280;
 }
 
+/* ── Event Calendar — countdown cells ──────────────────────────────── */
+.countdown-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 6px 10px;
+  min-width: 48px;
+}
+.countdown-num {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+.countdown-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+/* ── Event badges ──────────────────────────────────────────────────── */
+.event-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.event-badge-upcoming {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+.event-badge-active {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  animation: badge-glow 2s var(--ease-in-out) infinite;
+}
+.event-badge-completed {
+  background: rgba(107, 114, 128, 0.12);
+  color: #6b7280;
+}
+@keyframes badge-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+}
+
+/* Featured event entrance */
+.event-featured {
+  animation: slide-up 0.6s var(--ease-mewah) both;
+}
+/* Event card hover */
+.event-card {
+  transition: transform 0.4s var(--ease-mewah),
+              box-shadow 0.4s var(--ease-mewah);
+}
+
+/* ── Leaderboard — podium bars entrance ────────────────────────────── */
+.podium-bar {
+  animation: podium-grow 0.7s var(--ease-mewah) both;
+  animation-delay: 0.15s;
+}
+@keyframes podium-grow {
+  from { transform: scaleY(0); transform-origin: bottom; }
+  to   { transform: scaleY(1); transform-origin: bottom; }
+}
+.podium-slot {
+  animation: slide-up 0.6s var(--ease-mewah) both;
+}
+.podium-slot:nth-child(1) { animation-delay: 0.15s; }
+.podium-slot:nth-child(2) { animation-delay: 0.05s; }
+.podium-slot:nth-child(3) { animation-delay: 0.25s; }
+
+/* Podium avatar fallback (when image fails) */
+.podium-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4CAF50 0%, #2d6a4f 100%);
+}
+.podium-fallback::after {
+  content: "?";
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: white;
+}
+
+/* Leaderboard rows stagger entrance */
+.lb-row {
+  animation: lb-row-in 0.4s var(--ease-mewah) both;
+}
+.lb-row:nth-child(1) { animation-delay: 0.35s; }
+.lb-row:nth-child(2) { animation-delay: 0.40s; }
+.lb-row:nth-child(3) { animation-delay: 0.45s; }
+.lb-row:nth-child(4) { animation-delay: 0.50s; }
+.lb-row:nth-child(5) { animation-delay: 0.55s; }
+@keyframes lb-row-in {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 /* ── Theme toggle button (in nav) ───────────────────────────────────── */
 .theme-toggle {
   width: 38px; height: 38px;
@@ -615,6 +725,26 @@ body[data-theme="mewah"] .mobile-menu-anim {
   border-top-color: rgba(212, 175, 55, 0.18) !important;
 }
 body[data-theme="mewah"] .mobile-menu-anim .text-gray-700:hover { background: rgba(212, 175, 55, 0.08) !important; }
+
+/* Event calendar — mewah overrides */
+body[data-theme="mewah"] .event-card {
+  background: #1a211e !important;
+  border-color: rgba(212, 175, 55, 0.15) !important;
+}
+body[data-theme="mewah"] .event-card h4 { color: #f9fafb !important; }
+body[data-theme="mewah"] .event-badge-upcoming { background: rgba(212, 175, 55, 0.15); color: #efc94c; }
+body[data-theme="mewah"] .event-badge-completed { background: rgba(255, 255, 255, 0.08); color: #9ca3af; }
+body[data-theme="mewah"] .countdown-cell {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.25);
+}
+
+/* Leaderboard — mewah overrides */
+body[data-theme="mewah"] .lb-row:hover { background: rgba(212, 175, 55, 0.06) !important; }
+body[data-theme="mewah"] .lb-row .text-gray-800 { color: #d1d5db !important; }
+body[data-theme="mewah"] .lb-row .text-mc-grass { color: #efc94c !important; }
+body[data-theme="mewah"] .podium-slot .text-gray-900 { color: #f9fafb !important; }
+body[data-theme="mewah"] .podium-slot .text-mc-grass { color: #efc94c !important; }
 
 /* Reduced-motion users get static layouts. */
 @media (prefers-reduced-motion: reduce) {
