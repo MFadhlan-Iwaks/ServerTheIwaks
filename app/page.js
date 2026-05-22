@@ -5,9 +5,20 @@ import MemberCard from "../components/MemberCard";
 import CommandCard from "../components/CommandCard";
 import { membersData } from "../data/members";
 import { commandsData } from "../data/commands";
+import { galleryData } from "../data/gallery";
+import { rulesData } from "../data/rules";
+
+const navLinks = [
+  { href: "#beranda", label: "Beranda" },
+  { href: "#galeri", label: "Galeri" },
+  { href: "#aturan", label: "Aturan" },
+  { href: "#command", label: "Command" },
+  { href: "#warga", label: "Warga" },
+];
 
 export default function Home() {
   const [copiedType, setCopiedType] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const javaIP = "basic2.raehost.com:19258";
   const bedrockIP = "basic2.raehost.com";
@@ -25,6 +36,8 @@ export default function Home() {
 
   return (
     <main className="bg-mc-bg text-gray-800 antialiased selection:bg-mc-grass selection:text-white min-h-screen">
+
+      {/* ===== NAVBAR ===== */}
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -34,42 +47,72 @@ export default function Home() {
                 the <span className="text-mc-grass">IWAKS</span>
               </span>
             </div>
-            <div className="hidden md:flex space-x-8">
-              <a
-                href="#beranda"
-                className="text-gray-600 hover:text-mc-grass font-bold transition"
-              >
-                Beranda
-              </a>
-              <a
-                href="#command"
-                className="text-gray-600 hover:text-mc-grass font-bold transition"
-              >
-                Command
-              </a>
-              <a
-                href="#warga"
-                className="text-gray-600 hover:text-mc-grass font-bold transition"
-              >
-                Warga
-              </a>
+
+            {/* Desktop nav links */}
+            <div className="hidden md:flex space-x-6">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-gray-600 hover:text-mc-grass font-bold transition"
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
+
+            {/* Desktop Discord button */}
             <div className="hidden md:flex">
               <a
                 href="https://discord.gg/CHpsH4j2fA"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block"
               >
                 <button className="bg-mc-grass hover:bg-green-600 text-white px-5 py-2 rounded-lg font-bold shadow-lg shadow-green-500/30 transition transform hover:-translate-y-0.5 flex items-center gap-2">
                   <i className="fa-brands fa-discord"></i> Join Discord
                 </button>
               </a>
             </div>
+
+            {/* Mobile hamburger button */}
+            <button
+              className="md:hidden p-2 rounded-lg text-gray-600 hover:text-mc-grass hover:bg-gray-100 transition"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              <i className={`fa-solid ${isMenuOpen ? "fa-xmark" : "fa-bars"} text-xl`}></i>
+            </button>
           </div>
         </div>
+
+        {/* Mobile dropdown menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 flex flex-col gap-1 shadow-lg">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-gray-700 hover:text-mc-grass font-bold py-2.5 px-3 rounded-lg hover:bg-gray-50 transition"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+            <a
+              href="https://discord.gg/CHpsH4j2fA"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <button className="w-full mt-2 bg-mc-grass hover:bg-green-600 text-white px-5 py-2.5 rounded-lg font-bold flex items-center justify-center gap-2">
+                <i className="fa-brands fa-discord"></i> Join Discord
+              </button>
+            </a>
+          </div>
+        )}
       </nav>
 
+      {/* ===== HERO ===== */}
       <section
         id="beranda"
         className="relative bg-pattern text-white py-24 sm:py-32 overflow-hidden"
@@ -138,7 +181,122 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="command" className="py-20 bg-white border-y border-gray-100">
+      {/* ===== GALERI ===== */}
+      <section id="galeri" className="py-20 bg-mc-bg">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
+              Galeri Server
+            </h2>
+            <div className="w-24 h-1 bg-mc-grass mx-auto rounded-full mb-4"></div>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Sekilas pandang ke dalam dunia the IWAKS — dari bangunan megah hingga momen konyol yang sayang dilewatkan!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {galleryData.map((item) => (
+              <div
+                key={item.id}
+                className="group relative overflow-hidden rounded-2xl shadow-md"
+                style={{ aspectRatio: "16/9" }}
+              >
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div
+                    className={`w-full h-full flex flex-col items-center justify-center bg-gradient-to-br ${item.gradient} text-white`}
+                  >
+                    <i className={`${item.icon} text-5xl opacity-50 mb-3`}></i>
+                    <span className="text-sm font-bold opacity-60 tracking-wider">
+                      FOTO SEGERA HADIR
+                    </span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                  <div>
+                    <p className="text-white font-heading font-bold text-lg leading-tight">
+                      {item.title}
+                    </p>
+                    <p className="text-gray-300 text-sm mt-0.5">{item.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-center text-gray-400 text-sm mt-8">
+            <i className="fa-solid fa-circle-info mr-1"></i>
+            Punya screenshot keren? Kirim ke Discord buat masuk galeri!
+          </p>
+        </div>
+      </section>
+
+      {/* ===== ATURAN SERVER ===== */}
+      <section id="aturan" className="py-20 bg-white border-y border-gray-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
+              Aturan Server
+            </h2>
+            <div className="w-24 h-1 bg-mc-grass mx-auto rounded-full mb-4"></div>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Biar server tetap seru dan nyaman buat semua warga, tolong patuhi
+              aturan berikut ya!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {rulesData.map((rule, index) => (
+              <div
+                key={rule.id}
+                className="flex gap-4 items-start bg-mc-bg rounded-xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div
+                  className={`flex-shrink-0 w-10 h-10 rounded-lg ${rule.color} flex items-center justify-center text-white font-black text-sm font-heading`}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <i className={`${rule.icon} text-gray-400 text-sm`}></i>
+                    <h3 className="font-heading font-bold text-gray-900">
+                      {rule.title}
+                    </h3>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {rule.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center bg-mc-bg rounded-2xl p-6 border border-dashed border-gray-200">
+            <i className="fa-brands fa-discord text-indigo-500 text-2xl mb-2 block"></i>
+            <p className="font-bold text-gray-700">Ada pertanyaan soal aturan?</p>
+            <p className="text-gray-500 text-sm mt-1 mb-4">
+              Hubungi admin langsung lewat server Discord kami.
+            </p>
+            <a
+              href="https://discord.gg/CHpsH4j2fA"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold transition flex items-center gap-2 mx-auto">
+                <i className="fa-brands fa-discord"></i> Buka Discord
+              </button>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== COMMAND ===== */}
+      <section id="command" className="py-20 bg-mc-bg border-y border-gray-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-4">
@@ -167,7 +325,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="warga" className="py-20 bg-mc-bg relative">
+      {/* ===== WARGA ===== */}
+      <section id="warga" className="py-20 bg-white relative">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading font-black text-3xl sm:text-4xl text-gray-900 mb-12 text-center">
             Warga the IWAKS
@@ -192,6 +351,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== FOOTER ===== */}
       <footer className="bg-gray-900 text-gray-400 py-12 border-t-4 border-mc-grass">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
           <p>&copy; 2026 Server the IWAKS. All rights reserved.</p>
