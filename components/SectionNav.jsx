@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 const NAV_SECTIONS = [
   { id: "beranda", label: "Beranda" },
   { id: "galeri",  label: "Galeri"  },
+  { id: "event",   label: "Event"   },
   { id: "aturan",  label: "Aturan"  },
   { id: "command", label: "Command" },
+  { id: "leaderboard", label: "Leaderboard" },
   { id: "warga",   label: "Warga"   },
 ];
 
