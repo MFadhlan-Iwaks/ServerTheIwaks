@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import MemberCard from "../components/MemberCard";
 import CommandCard from "../components/CommandCard";
@@ -8,6 +8,9 @@ import ScrollProgress from "../components/ScrollProgress";
 import SectionNav from "../components/SectionNav";
 import HeroParallax from "../components/HeroParallax";
 import ScrollToTop from "../components/ScrollToTop";
+import ThemeToggle from "../components/ThemeToggle";
+import Toast, { showToast } from "../components/Toast";
+import StatsCounter from "../components/StatsCounter";
 import { membersData } from "../data/members";
 import { commandsData } from "../data/commands";
 import { galleryData } from "../data/gallery";
@@ -38,6 +41,9 @@ export default function Home() {
   const [copiedType, setCopiedType] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("beranda");
+  const [cubeBurst, setCubeBurst] = useState(false);
+  const cubeClicksRef = useRef(0);
+  const cubeResetTimer = useRef(null);
 
   useEffect(() => {
     let raf = 0;
@@ -76,9 +82,23 @@ export default function Home() {
       .writeText(text)
       .then(() => {
         setCopiedType(type);
+        showToast(`IP ${type === "java" ? "Java" : "Bedrock"} tersalin!`);
         setTimeout(() => setCopiedType(null), 2000);
       })
       .catch((err) => console.error(err));
+  };
+
+  const handleCubeClick = (e) => {
+    e.preventDefault();
+    cubeClicksRef.current += 1;
+    if (cubeResetTimer.current) clearTimeout(cubeResetTimer.current);
+    cubeResetTimer.current = setTimeout(() => { cubeClicksRef.current = 0; }, 1500);
+    if (cubeClicksRef.current >= 5) {
+      cubeClicksRef.current = 0;
+      setCubeBurst(true);
+      showToast("✨ Easter egg ditemukan! Kamu warga sejati.", "fa-solid fa-sparkles");
+      setTimeout(() => setCubeBurst(false), 900);
+    }
   };
 
   return (
@@ -88,14 +108,28 @@ export default function Home() {
       <SectionNav />
       <HeroParallax />
       <ScrollToTop />
+      <Toast />
 
       {/* ===== NAVBAR ===== */}
       <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <a href="#beranda" className="brand-wrap shrink-0 flex items-center gap-2 no-underline">
-              <span className="brand-cube text-mc-grass text-2xl">
+            <a
+              href="#beranda"
+              onClick={handleCubeClick}
+              className="brand-wrap shrink-0 flex items-center gap-2 no-underline relative"
+            >
+              <span className={`brand-cube text-mc-grass text-2xl ${cubeBurst ? "cube-spin" : ""}`}>
                 <i className="fa-solid fa-cube"></i>
+                {cubeBurst && (
+                  <span className="cube-burst" aria-hidden="true">
+                    <i className="fa-solid fa-leaf" style={{ "--bx": "-32px", "--by": "-24px" }}></i>
+                    <i className="fa-solid fa-diamond" style={{ "--bx": "32px", "--by": "-24px" }}></i>
+                    <i className="fa-solid fa-cube" style={{ "--bx": "-32px", "--by": "24px" }}></i>
+                    <i className="fa-solid fa-star" style={{ "--bx": "32px", "--by": "24px" }}></i>
+                    <i className="fa-solid fa-circle" style={{ "--bx": "0px", "--by": "-40px" }}></i>
+                  </span>
+                )}
               </span>
               <span className="font-heading font-black text-2xl tracking-tight text-gray-900">
                 the <span className="text-mc-grass">IWAKS</span>
@@ -119,27 +153,31 @@ export default function Home() {
               })}
             </div>
 
-            {/* Desktop Discord button */}
-            <div className="hidden md:flex">
+            {/* Desktop Discord button + Theme toggle */}
+            <div className="hidden md:flex items-center gap-3">
+              <ThemeToggle />
               <a
                 href="https://discord.gg/CHpsH4j2fA"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <button className="bg-[#5865F2] hover:bg-[#4752c4] text-white px-5 py-2 rounded-lg font-bold shadow-lg shadow-[rgba(88,101,242,0.30)] transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                <button className="press-effect bg-[#5865F2] hover:bg-[#4752c4] text-white px-5 py-2 rounded-lg font-bold shadow-lg shadow-[rgba(88,101,242,0.30)] transition transform hover:-translate-y-0.5 flex items-center gap-2">
                   <i className="fa-brands fa-discord"></i> Join Discord
                 </button>
               </a>
             </div>
 
-            {/* Mobile hamburger button */}
-            <button
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:text-mc-grass hover:bg-gray-100 transition"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              <i className={`fa-solid ${isMenuOpen ? "fa-xmark" : "fa-bars"} text-xl`}></i>
-            </button>
+            {/* Mobile theme toggle + hamburger */}
+            <div className="md:hidden flex items-center gap-2">
+              <ThemeToggle />
+              <button
+                className="press-effect p-2 rounded-lg text-gray-600 hover:text-mc-grass hover:bg-gray-100 transition"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                <i className={`fa-solid ${isMenuOpen ? "fa-xmark" : "fa-bars"} text-xl`}></i>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -209,7 +247,7 @@ export default function Home() {
 
           <h1 className="hero-h1 font-heading font-black text-5xl sm:text-6xl md:text-7xl mb-6 drop-shadow-lg">
             Bangun Dunia Bersama <br />{" "}
-            <span className="text-yellow-300">the IWAKS</span>
+            <span className="hero-accent">the IWAKS</span>
           </h1>
           <p className="hero-sub-p text-xl sm:text-2xl text-green-50 mb-10 max-w-2xl mx-auto drop-shadow-md">
             Server survival vanilla yang santai, damai, dan berfokus pada
@@ -218,7 +256,7 @@ export default function Home() {
           </p>
 
           <div className="hero-ip-row flex flex-col md:flex-row justify-center gap-4 max-w-3xl mx-auto">
-            <div className="flex-1 flex flex-col sm:flex-row items-center justify-between bg-white/10 backdrop-blur-md border border-white/30 rounded-xl p-2 shadow-xl">
+            <div className="ip-card-hero flex-1 flex flex-col sm:flex-row items-center justify-between bg-white/10 backdrop-blur-md border border-white/30 rounded-xl p-2 shadow-xl">
               <div className="px-4 py-2 text-center sm:text-left w-full sm:w-auto">
                 <span className="block text-xs font-black text-green-300 tracking-wider mb-1">
                   <i className="fa-brands fa-java mr-1"></i> JAVA EDITION
@@ -227,14 +265,14 @@ export default function Home() {
               </div>
               <button
                 onClick={() => handleCopyIP(javaIP, "java")}
-                className={`w-full sm:w-auto px-4 py-3 rounded-lg font-bold transition flex items-center justify-center gap-2 mt-2 sm:mt-0 ${copiedType === "java" ? "bg-green-100 text-green-600" : "bg-white text-mc-grass hover:bg-gray-100"}`}
+                className={`press-effect w-full sm:w-auto px-4 py-3 rounded-lg font-bold transition flex items-center justify-center gap-2 mt-2 sm:mt-0 ${copiedType === "java" ? "bg-green-100 text-green-600" : "bg-white text-mc-grass hover:bg-gray-100"}`}
               >
                 <i className="fa-regular fa-copy"></i>{" "}
                 <span>{copiedType === "java" ? "Tersalin!" : "Salin IP"}</span>
               </button>
             </div>
 
-            <div className="flex-1 flex flex-col sm:flex-row items-center justify-between bg-white/10 backdrop-blur-md border border-white/30 rounded-xl p-2 shadow-xl">
+            <div className="ip-card-hero flex-1 flex flex-col sm:flex-row items-center justify-between bg-white/10 backdrop-blur-md border border-white/30 rounded-xl p-2 shadow-xl">
               <div className="px-4 py-2 text-center sm:text-left w-full sm:w-auto">
                 <span className="block text-xs font-black text-blue-300 tracking-wider mb-1">
                   <i className="fa-solid fa-mobile-screen mr-1"></i> BEDROCK
@@ -247,7 +285,7 @@ export default function Home() {
               </div>
               <button
                 onClick={() => handleCopyIP(bedrockIP, "bedrock")}
-                className={`w-full sm:w-auto px-4 py-3 rounded-lg font-bold transition flex items-center justify-center gap-2 mt-2 sm:mt-0 ${copiedType === "bedrock" ? "bg-blue-100 text-blue-600" : "bg-white text-blue-600 hover:bg-gray-100"}`}
+                className={`press-effect w-full sm:w-auto px-4 py-3 rounded-lg font-bold transition flex items-center justify-center gap-2 mt-2 sm:mt-0 ${copiedType === "bedrock" ? "bg-blue-100 text-blue-600" : "bg-white text-blue-600 hover:bg-gray-100"}`}
               >
                 <i className="fa-regular fa-copy"></i>{" "}
                 <span>
@@ -257,6 +295,20 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ===== STATS ===== */}
+      <section id="stats" className="py-16 bg-mc-bg section-fade-into-white">
+       <SectionWrapper>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatsCounter value={membersData.length} suffix="+" label="Warga Aktif" />
+            <StatsCounter value={commandsData.reduce((n, c) => n + c.list.length, 0)} label="Command" />
+            <StatsCounter value={rulesData.length} label="Aturan Server" />
+            <StatsCounter value={99} suffix="%" label="Uptime" />
+          </div>
+        </div>
+       </SectionWrapper>
       </section>
 
       {/* ===== GALERI ===== */}
@@ -317,7 +369,7 @@ export default function Home() {
       </section>
 
       {/* ===== ATURAN SERVER ===== */}
-      <section id="aturan" className="py-20 bg-white border-y border-gray-100">
+      <section id="aturan" className="py-20 bg-white border-y border-gray-100 section-fade-into-cream">
        <SectionWrapper>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -335,10 +387,10 @@ export default function Home() {
             {rulesData.map((rule, index) => (
               <div
                 key={rule.id}
-                className="flex gap-4 items-start bg-mc-bg rounded-xl p-5 border border-gray-100 shadow-warm hover:shadow-warm-md transition-shadow duration-300"
+                className="rule-tile flex gap-4 items-start bg-mc-bg rounded-xl p-5 border border-gray-100 shadow-warm hover:shadow-warm-md transition-shadow duration-300"
               >
                 <div
-                  className={`flex-shrink-0 w-10 h-10 rounded-lg ${rule.color} flex items-center justify-center text-white font-black text-sm font-heading`}
+                  className={`rule-num-anim shrink-0 w-10 h-10 rounded-lg ${rule.color} flex items-center justify-center text-white font-black text-sm font-heading`}
                 >
                   {String(index + 1).padStart(2, "0")}
                 </div>
@@ -368,7 +420,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold transition flex items-center gap-2 mx-auto">
+              <button className="press-effect bg-[#5865F2] hover:bg-[#4752c4] text-white px-6 py-2 rounded-lg font-bold transition flex items-center gap-2 mx-auto">
                 <i className="fa-brands fa-discord"></i> Buka Discord
               </button>
             </a>
@@ -378,7 +430,7 @@ export default function Home() {
       </section>
 
       {/* ===== COMMAND ===== */}
-      <section id="command" className="py-20 bg-mc-bg border-y border-gray-100">
+      <section id="command" className="py-20 bg-mc-bg border-y border-gray-100 section-fade-into-white">
        <SectionWrapper>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
