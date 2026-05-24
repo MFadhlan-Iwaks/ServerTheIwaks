@@ -79,8 +79,8 @@ export default function Home() {
     };
   }, []);
 
-  const javaIP = "basic4.raehost.com:19245";
-  const bedrockIP = "basic4.raehost.com";
+  const javaIP = "iwak.shiend.my.id:19245";
+  const bedrockIP = "iwak.shiend.my.id";
   const bedrockPort = "19245";
 
   const handleCopyIP = (text, type) => {
