@@ -79,9 +79,9 @@ export default function Home() {
     };
   }, []);
 
-  const javaIP = "basic2.raehost.com:19258";
-  const bedrockIP = "basic2.raehost.com";
-  const bedrockPort = "19258";
+  const javaIP = "basic4.raehost.com:19245";
+  const bedrockIP = "basic4.raehost.com";
+  const bedrockPort = "19245";
 
   const handleCopyIP = (text, type) => {
     navigator.clipboard
