@@ -90,7 +90,14 @@ function EventCard({ event, isFeatured = false }) {
 
         <div className="relative z-10">
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <StatusBadge status={event.status} />
+            {event.comingSoon ? (
+              <span className="event-badge bg-white/25 text-white border border-white/40 backdrop-blur-sm">
+                <i className="fa-solid fa-hourglass-half mr-1.5" />
+                Segera Hadir
+              </span>
+            ) : (
+              <StatusBadge status={event.status} />
+            )}
             <span className="text-xs font-bold bg-white/20 backdrop-blur-sm px-2.5 py-1 rounded-full">
               <i className="fa-solid fa-tag mr-1" />{event.category}
             </span>
@@ -103,35 +110,49 @@ function EventCard({ event, isFeatured = false }) {
             {event.description}
           </p>
 
-          <div className="flex flex-col sm:flex-row sm:items-end gap-5">
-            <div className="flex-1 space-y-2">
-              <div className="flex items-center gap-2 text-sm">
-                <i className="fa-regular fa-calendar w-4 text-center" />
-                <span className="font-bold">{formattedDate}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <i className="fa-regular fa-clock w-4 text-center" />
-                <span className="font-bold">{formattedTime}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <i className="fa-solid fa-gift w-4 text-center" />
-                <span>{event.rewards}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <i className="fa-solid fa-user-tie w-4 text-center" />
-                <span>Koordinator: <strong>{event.coordinator}</strong></span>
+          {event.comingSoon ? (
+            <div className="flex items-center gap-3 bg-white/15 backdrop-blur-sm border border-white/25 rounded-xl px-4 py-3">
+              <i className="fa-solid fa-bullhorn text-2xl" />
+              <div>
+                <p className="font-heading font-bold text-base sm:text-lg leading-tight">
+                  Segera Hadir
+                </p>
+                <p className="text-white/80 text-xs sm:text-sm">
+                  Nantikan pengumuman lengkapnya di Discord!
+                </p>
               </div>
             </div>
-
-            {event.status === "upcoming" && (
-              <div className="shrink-0">
-                <p className="text-xs font-bold uppercase tracking-wider mb-2 text-white/70">
-                  Dimulai dalam
-                </p>
-                <CountdownDisplay targetDate={event.date} />
+          ) : (
+            <div className="flex flex-col sm:flex-row sm:items-end gap-5">
+              <div className="flex-1 space-y-2">
+                <div className="flex items-center gap-2 text-sm">
+                  <i className="fa-regular fa-calendar w-4 text-center" />
+                  <span className="font-bold">{formattedDate}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <i className="fa-regular fa-clock w-4 text-center" />
+                  <span className="font-bold">{formattedTime}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <i className="fa-solid fa-gift w-4 text-center" />
+                  <span>{event.rewards}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <i className="fa-solid fa-user-tie w-4 text-center" />
+                  <span>Koordinator: <strong>{event.coordinator}</strong></span>
+                </div>
               </div>
-            )}
-          </div>
+
+              {event.status === "upcoming" && (
+                <div className="shrink-0">
+                  <p className="text-xs font-bold uppercase tracking-wider mb-2 text-white/70">
+                    Dimulai dalam
+                  </p>
+                  <CountdownDisplay targetDate={event.date} />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -186,7 +207,9 @@ export default function EventCalendar({ events }) {
     return new Date(a.date) - new Date(b.date);
   });
 
-  const featured = sorted.find((e) => e.status === "active" || e.status === "upcoming");
+  const featured =
+    sorted.find((e) => e.comingSoon) ||
+    sorted.find((e) => e.status === "active" || e.status === "upcoming");
   const rest = sorted.filter((e) => e !== featured);
 
   const filters = [
