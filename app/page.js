@@ -80,7 +80,7 @@ export default function Home() {
   }, []);
 
   const javaIP = "iwak.shiend.my.id:19245";
-  const bedrockIP = "iwak.shiend.my.id";
+  const bedrockIP = "iwak.shiend.my.id:19245";
   const bedrockPort = "19245";
 
   const handleCopyIP = (text, type) => {

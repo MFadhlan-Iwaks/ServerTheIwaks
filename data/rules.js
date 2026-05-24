@@ -41,4 +41,11 @@ export const rulesData = [
     icon: "fa-solid fa-shield-halved",
     color: "bg-amber-500",
   },
+  {
+    id: 7,
+    title: "Dilarang Menggunakan Chunkbase",
+    desc: "Untuk menjaga keamanan dan kenyamanan bersama, penggunaan Chubkbase dilarang keras di server ini.",
+    icon: "fa-solid fa-triangle-exclamation",
+    color: "bg-gray-800",
+  },
 ];
